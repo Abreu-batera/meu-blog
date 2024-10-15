@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seção de Comentários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #000000fd;
+        }
+        .comment-section {
+             background: rgba(255, 0, 0, 0.281);
+             border-radius: 10px;
+             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.596);
+             padding: 20px;
+        }
+        h2 {
+            color: white;
+            text-align: center;
+        }
+        h3{
+            color: white;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .comments-display {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        .comment-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        a{
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    background: rgba(175, 0, 0, 0.664);
+    border-radius: 5%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.596);
+    padding: 8px;
+    text-align: center;
+
+}
+label{
+    color: white;
+}
+    </style>
+</head>
+<body>
+
+    <div class="comment-section">
+        <a href="index.html">home</a>
+        <a href="fotos.html">Fotos</a>
+        <a href="agendas.html">Minhas agendas</a>
+        <a href="pagina2.html">Perguntas</a>
+        <h2>Deixe seu Comentário</h2>
+        <form id="commentForm">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" placeholder="Seu nome" required>
+
+            <label for="comment">Comentário:</label>
+            <textarea id="comment" name="comment" rows="5" placeholder="Escreva seu comentário aqui..." required></textarea>
+
+            <button type="submit">Enviar Comentário</button>
+        </form>
+
+        <div class="comments-display" id="commentsDisplay">
+            <h3>Comentários</h3>
+        </div>
+    </div>
+
+    <script>
+        // Carregar comentários armazenados no localStorage
+        window.onload = function() {
+            loadComments();
+        };
+
+        document.getElementById('commentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Pegar dados do formulário
+            const name = document.getElementById('name').value;
+            const comment = document.getElementById('comment').value;
+
+            if (name && comment) {
+                // Criar objeto de comentário
+                const commentObject = { name, comment, date: new Date().toLocaleString() };
+
+                // Recuperar comentários do localStorage
+                let comments = JSON.parse(localStorage.getItem('comments')) || [];
+
+                // Adicionar novo comentário
+                comments.push(commentObject);
+
+                // Armazenar novamente no localStorage
+                localStorage.setItem('comments', JSON.stringify(comments));
+
+                // Limpar o formulário
+                document.getElementById('commentForm').reset();
+
+                // Recarregar os comentários
+                loadComments();
+            }
+        });
+
+        function loadComments() {
+            const commentsDisplay = document.getElementById('commentsDisplay');
+            commentsDisplay.innerHTML = '<h3>Comentários</h3>';
+
+            // Pegar os comentários do localStorage
+            const comments = JSON.parse(localStorage.getItem('comments')) || [];
+
+            // Exibir cada comentário
+            comments.forEach(function(comment) {
+                const commentDiv = document.createElement('div');
+                commentDiv.classList.add('comment-item');
+                commentDiv.innerHTML = `<strong>${comment.name}</strong> <br> <small>${comment.date}</small> <p>${comment.comment}</p>`;
+                commentsDisplay.appendChild(commentDiv);
+            });
+        }
+    </script>
+
+</body>
+</html>
